@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'nodegithubaction'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C0B6C3C9B6847E9B1ABDFCC8047F892 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C0B6C3C9B6847E9B1ABDFCC8047F866 }}
           package: .
