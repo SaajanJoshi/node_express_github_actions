@@ -11,7 +11,11 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 //http://localhost:3000/
 app.get('/', function (req, res) {
-    res.send("<h1>Home Page</h1>")
+    res.send(`<a href="http://${SERVER_HOST}:${SERVER_PORT}/name">Name</a><br>
+              <a href="http://${SERVER_HOST}:${SERVER_PORT}/admin">Admin Page</a><br>
+            `)
+
+
 })
 
 app.get('/name', function (req, res) {
