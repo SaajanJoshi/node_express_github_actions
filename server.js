@@ -3,7 +3,7 @@ var express = require('express')
 var app = express()
 
 const SERVER_PORT = 3000
-const SERVER_HOST = "https://nodegithubaction.azurewebsites.net/"
+const SERVER_HOST = "https://nodegithubaction.azurewebsites.net"
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -11,8 +11,8 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 //http://localhost:3000/
 app.get('/', function (req, res) {
-    res.send(`<a href="http://${SERVER_HOST}/name">Name</a><br>
-              <a href="http://${SERVER_HOST}/admin">Admin Page</a><br>
+    res.send(`<a href="${SERVER_HOST}/name">Name</a><br>
+              <a href="${SERVER_HOST}/admin">Admin Page</a><br>
             `)
 
 
