@@ -8,15 +8,23 @@ const SERVER_HOST = "https://nodegithubaction.azurewebsites.net"
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
+app.set('view engine', 'ejs'); // Set EJS as the view engine
+app.set('views', path.join(__dirname, 'views')); // Set the 'views' directory
+
+
+// http://localhost:3000/
+app.get('/', function (req, res) {
+    res.render('index'); // Render the 'index.ejs' template
+});
 
 //http://localhost:3000/
-app.get('/', function (req, res) {
-    res.send(`<a href="${SERVER_HOST}/name">Name</a><br>
-              <a href="${SERVER_HOST}/admin">Admin Page</a><br>
-            `)
+// app.get('/', function (req, res) {
+//     res.send(`<a href="${SERVER_HOST}/name">Name</a><br>
+//               <a href="${SERVER_HOST}/admin">Admin Page</a><br>
+//             `)
 
 
-})
+// })
 
 app.get('/name', function (req, res) {
   res.send("<h1>Saajan Joshi (C0871662)</h1>")
