@@ -8,13 +8,12 @@ const SERVER_HOST = "https://nodegithubaction.azurewebsites.net"
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.set('view engine', 'ejs'); // Set EJS as the view engine
-app.set('views', path.join(__dirname, 'views')); // Set the 'views' directory
+app.use(express.static('views'));
 
 
 // http://localhost:3000/
 app.get('/', function (req, res) {
-    res.render('index'); // Render the 'index.ejs' template
+  res.sendFile('views/index.html', { root: __dirname });
 });
 
 //http://localhost:3000/
