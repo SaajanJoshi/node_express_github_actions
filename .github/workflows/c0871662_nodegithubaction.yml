@@ -37,7 +37,7 @@ jobs:
       with:
         push: true
         tags: nodecontainer.azurecr.io/nodeapp:${{ github.sha }}
-        file: node_express_github_actions/Dockerfile
+        file: Dockerfile
 
       # - name: Set up Node.js version
       #   uses: actions/setup-node@v1
