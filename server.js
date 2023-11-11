@@ -3,7 +3,7 @@ var express = require('express')
 var app = express()
 
 const SERVER_PORT = 3000
-const SERVER_HOST = "https://nodegithubaction.azurewebsites.net"
+const SERVER_HOST = "http://localhost"
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -36,22 +36,22 @@ app.post('/profile', (req, res) => {
 })
 
 //http://localhost:3000/admin
-app.get('/admin', (req, res) => {
+app.get('/admin', function (req, res) {
   res.send('Admin Homepage')
 })
 
 //http://localhost:3000/user/100
-app.get("/user/:id", (req, res)=> {
+app.get("/user/:id", function (req, res) {
       res.send(`User ID: ${req.params.id}`);
     }
 )
 
 //http://localhost:3000/valueofday/1980-01-24
-app.get("/valueofday/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", (req, res) => {
+app.get("/valueofday/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function(req, res){
   console.log(req.params)
   res.send(req.params)
 });
   
 app.listen(process.env.PORT  || SERVER_PORT, () => {
-    console.log(`Server running at http://${SERVER_HOST}:${SERVER_PORT}/`);
+    console.log(`Server running at ${SERVER_HOST}:${SERVER_PORT}/`);
 })
