@@ -1,0 +1,82 @@
+<!-- client/public/updateCourse.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Course</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h2>Update Course</h2>
+    <form id="updateCourseForm">
+        <div class="form-group">
+            <label for="courseName">Course Name:</label>
+            <input type="text" class="form-control" id="courseName" name="courseName" required>
+        </div>
+      <button type="button" class="btn btn-primary" onclick="updateCourse()">Update Course</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // Fetch student data from your API
+    async function fetchCourseDetails() {
+      try {
+        // Extract student ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('id');
+
+        const response = await fetch(`/api/courses/${courseId}`);
+        const course = await response.json();
+        renderCourseDetails(course);
+      } catch (error) {
+        console.log('Error fetching course details ');
+      }
+    }
+
+    // Function to render student details in the form
+    function renderCourseDetails(course) {
+      document.getElementById('courseName').value = course.courseName;
+    }
+
+
+    async function updateCourse() {
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get('id');
+      
+      const formData = {
+        id: courseId,
+        courseName: document.getElementById('courseName').value,
+      };
+
+      try {
+        await fetch(`/api/courses/${courseId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        // Redirect to the course list after successful update
+        window.location.href = '/courses.html';
+      } catch (error) {
+        console.log('Error updating course');
+      }
+    }
+
+    fetchCourseDetails();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!-- client/public/edit.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Student</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h2>Edit Student</h2>
+
+    <form id="editStudentForm">
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id">Student ID:</label>
+        <input type="text" class="form-control" id="id" name="id" readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="semester">Semester:</label>
+        <input type="text" class="form-control" id="semester" name="semester" required>
+      </div>
+
+      <div class="form-group">
+        <label for="courses">Courses:</label>
+        <select class="form-control" id="courses" name="courses" multiple>
+          <!-- Courses will be dynamically added here -->
+        </select>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="updateStudent()">Update Student</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // Fetch student data from your API
+    async function fetchCourses(){
+      try {
+        const response = await fetch('/api/courses');
+        return response.json();
+      } catch (error) {
+        console.log('Error fetching courses:', error);
+        return; // Exit the function if there's an error fetching courses
+      }
+    }
+    async function fetchStudentDetails() {
+      try {
+        // Extract student ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+
+        const response = await fetch(`/api/students/${studentId}`);
+        const student = await response.json();
+
+          // Fetch courses outside of the loop
+        let courses = await fetchCourses();
+        
+        renderStudentDetails(student,courses);
+      } catch (error) {
+        console.log('Error fetching student details:');
+      }
+    }
+
+    // Function to render student details in the form
+    function renderStudentDetails(student,courses) {
+      document.getElementById('firstName').value = student.firstName;
+      document.getElementById('lastName').value = student.lastName;
+      document.getElementById('id').value = student.id;
+      document.getElementById('semester').value = student.semester;
+     
+      renderCourseOptions(student.courses,courses);
+    }
+
+    // Function to update a student
+    async function updateStudent() {
+      const studentId = document.getElementById('id').value;
+
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        semester: document.getElementById('semester').value,
+        courses: Array.from(document.getElementById('courses').selectedOptions).map(option => option.value)
+      };
+
+      try {
+        await fetch(`/api/students/${studentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        // Redirect to the student list after successful update
+        window.location.href = '/index.html';
+      } catch (error) {
+        console.log('Error updating student');
+      }
+    }
+
+
+// Function to render course options in the dropdown
+function renderCourseOptions(selectedCourses,courses) {
+    const coursesDropdown = document.getElementById('courses');
+
+    // Clear existing options
+    coursesDropdown.innerHTML = '';
+
+    // Render a default option for no selection
+    const defaultOption = document.createElement('option');
+    defaultOption.text = 'Select Courses';
+    defaultOption.disabled = true;
+    coursesDropdown.appendChild(defaultOption);
+
+    // Render each course option
+    // (Assuming the list of courses is available globally or fetched earlier)
+    courses.forEach(course => {
+      const option = document.createElement('option');
+      option.value = course._id; // Assuming the course object has an _id field
+      option.text = course.courseName;
+      option.selected = selectedCourses.includes(course._id); // Pre-select courses
+      coursesDropdown.appendChild(option);
+    });
+  }
+    // Initial rendering
+    fetchStudentDetails();
+  </script>
+
+</body>
+</html>

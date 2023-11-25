@@ -1,0 +1,92 @@
+<!-- client/public/courses.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course List</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Course List</h2>
+      </div>
+      <div class="col-md-6 text-right">
+        <a href="createCourse.html" class="btn btn-primary">Create Course</a>
+      </div>
+    </div>
+
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col">Course Name</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="courseList">
+        <!-- Course rows will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // Fetch course data from your API
+    async function fetchCourses() {
+      try {
+        const response = await fetch('/api/courses');
+        const courses = await response.json();
+        renderCourseRows(courses);
+      } catch (error) {
+        console.log('No course record');
+      }
+    }
+
+    // Function to render course rows
+    function renderCourseRows(courses) {
+      const courseList = document.getElementById('courseList');
+
+      // Clear existing rows
+      courseList.innerHTML = '';
+
+      // Render each course row
+      courses.forEach(course => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${course.courseName}</td>
+          <td>
+            <a href="updateCourse.html?id=${course._id}" class="btn btn-warning btn-sm">Edit</a>
+            <button class="btn btn-danger btn-sm" onclick="deleteCourse('${course._id}')">Delete</button>
+          </td>
+        `;
+        courseList.appendChild(row);
+      });
+    }
+
+    // Function to delete a course
+    async function deleteCourse(courseId) {
+      try {
+        await fetch(`/api/courses/${courseId}`, { method: 'DELETE' });
+        // After deletion, fetch and render the updated course list
+        fetchCourses();
+      } catch (error) {
+        console.log('Error deleting course');
+      }
+    }
+
+    // Initial rendering
+    fetchCourses();
+  </script>
+
+</body>
+</html>
