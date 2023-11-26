@@ -2,7 +2,6 @@ version: '2'
 services:
   node-app:
     build: .
-    image: node-app
     command: npm run start
     volumes:
       - .:/usr/app/
@@ -24,9 +23,6 @@ services:
       - ./mongodb_data:/data/db   # Mounts a local folder to store MongoDB data
     networks:
       - node-network
-
-volumes:
-  dbdata6:
 
 networks:
   node-network:
