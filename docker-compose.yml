@@ -3,14 +3,16 @@ services:
   node-app:
     build: .
     image: node-app
+    command: npm run start
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
     environment:
       - MONGODB_URL=mongodb://mongodb:27017/studentmgmt
     ports:
       - '3000:3000'
     depends_on:
       - mongodb
-    volumes:
-      - .:/src
     networks:
       - node-network
 
@@ -19,7 +21,7 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - dbdata6:/data/db
+      - ./mongodb_data:/data/db   # Mounts a local folder to store MongoDB data
     networks:
       - node-network
 

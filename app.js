@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // Connect to MongoDB (replace 'yourdatabase' with your actual database name)
-mongoose.connect('mongodb://mongodb:27017/studentmgmt');
+mongoose.connect(process.env.MONGODB_URL);
+console.log(process.env.MONGODB_URL);
 
 // Serve static HTML files
 app.use(express.static(path.join(__dirname)));
