@@ -1,5 +1,11 @@
-FROM --platform=linux/amd64 node:10-alpine
-WORKDIR /usr/app
+FROM node:lts-alpine
+WORKDIR /src
+# Copy package.json and install Node.js dependencies
 COPY package.json .
 RUN npm install --quiet
-COPY . .
+
+# Copy the application code
+COPY . ./src
+EXPOSE 3000
+
+CMD ["node", "app.js"]
